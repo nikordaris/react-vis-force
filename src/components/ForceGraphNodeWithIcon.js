@@ -66,13 +66,15 @@ export default class ForceGraphNodeWithIcon extends PureRenderComponent {
 
     const r = isFunction(radius) ? radius(node) : radius;
 
-    return [
-      <circle
-        className={`rv-force__node ${className}`}
-        r={r}
-        {...spreadable}
-      />,
-      <text style={iconStyle} x={cx} y={cy}>{icon}</text>,
-    ];
+    return (
+      <g>
+        <circle
+          className={`rv-force__node ${className}`}
+          r={r}
+          {...spreadable}
+        />
+        <text style={iconStyle} x={cx} y={cy}>{icon}</text>
+      </g>
+    );
   }
 }

@@ -1890,14 +1890,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      var r = (0, _lodash.isFunction)(radius) ? radius(node) : radius;
 	
-	      return [_react2.default.createElement('circle', _extends({
-	        className: 'rv-force__node ' + className,
-	        r: r
-	      }, spreadable)), _react2.default.createElement(
-	        'text',
-	        { style: iconStyle, x: cx, y: cy },
-	        icon
-	      )];
+	      return _react2.default.createElement(
+	        'g',
+	        null,
+	        _react2.default.createElement('circle', _extends({
+	          className: 'rv-force__node ' + className,
+	          r: r
+	        }, spreadable)),
+	        _react2.default.createElement(
+	          'text',
+	          { style: iconStyle, x: cx, y: cy },
+	          icon
+	        )
+	      );
 	    }
 	  }], [{
 	    key: 'propTypes',
