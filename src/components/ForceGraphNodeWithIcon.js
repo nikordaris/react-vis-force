@@ -18,35 +18,61 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import React from 'react';
+import React, { PropTypes } from 'react';
+import { isFunction } from 'lodash';
 
 import PureRenderComponent from './PureRenderComponent';
-import linkPropTypes from '../propTypes/link';
+import nodePropTypes from '../propTypes/node';
 
-export default class ForceGraphLink extends PureRenderComponent {
+export default class ForceGraphNodeWithIcon extends PureRenderComponent {
   static get propTypes() {
     return {
-      link: linkPropTypes.isRequired,
+      node: nodePropTypes.isRequired,
+      radius: PropTypes.oneOfType([PropTypes.func, PropTypes.number]),
+      icon: PropTypes.string,
+      iconOffset: PropTypes.shape({
+        x: PropTypes.oneOfType([PropTypes.func, PropTypes.number]),
+        y: PropTypes.oneOfType([PropTypes.func, PropTypes.number]),
+      }),
+      iconStyle: PropTypes.object,
+      cx: PropTypes.number,
+      cy: PropTypes.number,
+      // these props only have an impact on the parent.
+      labelStyle: PropTypes.object,
+      labelClass: PropTypes.string,
+      showLabel: PropTypes.bool,
     };
   }
 
   static get defaultProps() {
     return {
       className: '',
-      opacity: 0.6,
-      stroke: '#999',
+      fill: '#333',
+      opacity: 1,
+      stroke: '#FFF',
+      strokeWidth: 1.5,
+      radius: 5,
     };
   }
 
   render() {
-    const { link, strokeWidth, className, ...spreadable } = this.props;
+    const {
+      node, className, radius, cx, cy, icon, iconStyle,
+      /* eslint-disable no-unused-vars */
+      labelStyle, labelClass, showLabel, iconOffset,
+      /* eslint-enable no-unused-vars */
+      ...spreadable
+    } = this.props;
 
-    return (
-      <line
-        className={`rv-force__link ${className}`}
-        strokeWidth={strokeWidth || Math.sqrt(link.value)}
+    const r = isFunction(radius) ? radius(node) : radius;
+
+    return [
+      <circle
+        className={`rv-force__node ${className}`}
+        r={r}
         {...spreadable}
-      />
-    );
+      />,
+      <text style={iconStyle} x={cx} y={cy}>{icon}</text>,
+    ];
   }
 }

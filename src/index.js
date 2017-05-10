@@ -1,4 +1,4 @@
-// Copyright (c) 2016 Uber Technologies, Inc.
+// Copyright (c) 2017 Uber Technologies, Inc.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,3 +24,4 @@ export { default as ForceGraphLink } from './components/ForceGraphLink';
 export { default as ForceGraphArrowLink } from './components/ForceGraphArrowLink';
 export { default as ForceGraphNode } from './components/ForceGraphNode';
 export { default as InteractiveForceGraph } from './components/InteractiveForceGraph';
+export { default as ForceGraphNodeWithIcon } from './components/ForceGraphNodeWithIcon';
