@@ -20,7 +20,6 @@
 
 import React, { PropTypes } from 'react';
 import { isFunction } from 'lodash';
-
 import PureRenderComponent from './PureRenderComponent';
 import nodePropTypes from '../propTypes/node';
 
@@ -69,22 +68,23 @@ export default class ForceGraphNodeWithIcon extends PureRenderComponent {
       ...spreadable
     } = this.props;
     const { cx, cy } = this.props;
-    let { x: xIconOffset = 0, y: yIconOffset = 0 } = iconOffset;
-    xIconOffset = isFunction(xIconOffset) ? xIconOffset(node) : xIconOffset;
-    yIconOffset = isFunction(yIconOffset) ? yIconOffset(node) : yIconOffset;
-
+    let { x: dx = 0, y: dy = 0 } = iconOffset;
+    dx = isFunction(dx) ? dx(node) : dx;
+    dy = isFunction(dy) ? dy(node) : dy;
+    const radius = node.radius || r;
     return (
-      <g>
+      <g className={`rv-force__node ${className}`}>
         <circle
-          className={`rv-force__node ${className}`}
-          r={node.radius || r}
+          r={radius}
           {...spreadable}
         />
         {icon && <text
-          style={iconOptions.style}
-          fill={iconOptions.fill}
-          x={cx + xIconOffset}
-          y={cy + yIconOffset}
+          fontSize={radius * 0.75}
+          {...iconOptions}
+          x={cx}
+          y={cy}
+          dx={dx}
+          dy={dy}
         >
           {icon}
         </text>}
