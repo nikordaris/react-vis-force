@@ -750,6 +750,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return typeof number === 'number' ? number / this.state.scale : number;
 	    }
 	  }, {
+	    key: 'inverseScale',
+	    value: function inverseScale(number) {
+	      return typeof number === 'number' ? number * this.state.scale : number;
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _this2 = this;
@@ -1877,29 +1882,42 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var _props = this.props,
 	          node = _props.node,
 	          className = _props.className,
-	          radius = _props.radius,
-	          cx = _props.cx,
-	          cy = _props.cy,
 	          icon = _props.icon,
-	          iconStyle = _props.iconStyle,
+	          iconOptions = _props.iconOptions,
+	          _props$r = _props.r,
+	          r = _props$r === undefined ? 5 : _props$r,
 	          labelStyle = _props.labelStyle,
 	          labelClass = _props.labelClass,
 	          showLabel = _props.showLabel,
 	          iconOffset = _props.iconOffset,
-	          spreadable = _objectWithoutProperties(_props, ['node', 'className', 'radius', 'cx', 'cy', 'icon', 'iconStyle', 'labelStyle', 'labelClass', 'showLabel', 'iconOffset']);
+	          spreadable = _objectWithoutProperties(_props, ['node', 'className', 'icon', 'iconOptions', 'r', 'labelStyle', 'labelClass', 'showLabel', 'iconOffset']);
 	
-	      var r = (0, _lodash.isFunction)(radius) ? radius(node) : radius;
+	      var _props2 = this.props,
+	          cx = _props2.cx,
+	          cy = _props2.cy;
+	      var _iconOffset$x = iconOffset.x,
+	          xIconOffset = _iconOffset$x === undefined ? 0 : _iconOffset$x,
+	          _iconOffset$y = iconOffset.y,
+	          yIconOffset = _iconOffset$y === undefined ? 0 : _iconOffset$y;
+	
+	      xIconOffset = (0, _lodash.isFunction)(xIconOffset) ? xIconOffset(node) : xIconOffset;
+	      yIconOffset = (0, _lodash.isFunction)(yIconOffset) ? yIconOffset(node) : yIconOffset;
 	
 	      return _react2.default.createElement(
 	        'g',
 	        null,
 	        _react2.default.createElement('circle', _extends({
 	          className: 'rv-force__node ' + className,
-	          r: r
+	          r: node.radius || r
 	        }, spreadable)),
-	        _react2.default.createElement(
+	        icon && _react2.default.createElement(
 	          'text',
-	          { style: iconStyle, x: cx, y: cy },
+	          {
+	            style: iconOptions.style,
+	            fill: iconOptions.fill,
+	            x: cx + xIconOffset,
+	            y: cy + yIconOffset
+	          },
 	          icon
 	        )
 	      );
@@ -1909,13 +1927,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    get: function get() {
 	      return {
 	        node: _node2.default.isRequired,
-	        radius: _react.PropTypes.oneOfType([_react.PropTypes.func, _react.PropTypes.number]),
 	        icon: _react.PropTypes.string,
 	        iconOffset: _react.PropTypes.shape({
 	          x: _react.PropTypes.oneOfType([_react.PropTypes.func, _react.PropTypes.number]),
 	          y: _react.PropTypes.oneOfType([_react.PropTypes.func, _react.PropTypes.number])
 	        }),
-	        iconStyle: _react.PropTypes.object,
+	        iconOptions: _react.PropTypes.object,
 	        cx: _react.PropTypes.number,
 	        cy: _react.PropTypes.number,
 	        // these props only have an impact on the parent.
@@ -1928,12 +1945,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'defaultProps',
 	    get: function get() {
 	      return {
+	        cx: 0,
+	        cy: 0,
 	        className: '',
 	        fill: '#333',
 	        opacity: 1,
 	        stroke: '#FFF',
 	        strokeWidth: 1.5,
-	        radius: 5
+	        iconOffset: {
+	          x: 0,
+	          y: 0
+	        },
+	        iconOptions: {}
 	      };
 	    }
 	  }]);

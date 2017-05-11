@@ -28,13 +28,12 @@ export default class ForceGraphNodeWithIcon extends PureRenderComponent {
   static get propTypes() {
     return {
       node: nodePropTypes.isRequired,
-      radius: PropTypes.oneOfType([PropTypes.func, PropTypes.number]),
       icon: PropTypes.string,
       iconOffset: PropTypes.shape({
         x: PropTypes.oneOfType([PropTypes.func, PropTypes.number]),
         y: PropTypes.oneOfType([PropTypes.func, PropTypes.number]),
       }),
-      iconStyle: PropTypes.object,
+      iconOptions: PropTypes.object,
       cx: PropTypes.number,
       cy: PropTypes.number,
       // these props only have an impact on the parent.
@@ -46,34 +45,49 @@ export default class ForceGraphNodeWithIcon extends PureRenderComponent {
 
   static get defaultProps() {
     return {
+      cx: 0,
+      cy: 0,
       className: '',
       fill: '#333',
       opacity: 1,
       stroke: '#FFF',
       strokeWidth: 1.5,
-      radius: 5,
+      iconOffset: {
+        x: 0,
+        y: 0,
+      },
+      iconOptions: {},
     };
   }
 
   render() {
     const {
-      node, className, radius, cx, cy, icon, iconStyle,
+      node, className, icon, iconOptions, r = 5,
       /* eslint-disable no-unused-vars */
       labelStyle, labelClass, showLabel, iconOffset,
       /* eslint-enable no-unused-vars */
       ...spreadable
     } = this.props;
-
-    const r = isFunction(radius) ? radius(node) : radius;
+    const { cx, cy } = this.props;
+    let { x: xIconOffset = 0, y: yIconOffset = 0 } = iconOffset;
+    xIconOffset = isFunction(xIconOffset) ? xIconOffset(node) : xIconOffset;
+    yIconOffset = isFunction(yIconOffset) ? yIconOffset(node) : yIconOffset;
 
     return (
       <g>
         <circle
           className={`rv-force__node ${className}`}
-          r={r}
+          r={node.radius || r}
           {...spreadable}
         />
-        <text style={iconStyle} x={cx} y={cy}>{icon}</text>
+        {icon && <text
+          style={iconOptions.style}
+          fill={iconOptions.fill}
+          x={cx + xIconOffset}
+          y={cy + yIconOffset}
+        >
+          {icon}
+        </text>}
       </g>
     );
   }
