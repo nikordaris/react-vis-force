@@ -18,14 +18,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import React, { PropTypes } from 'react';
-
+import React, { PropTypes, Children, cloneElement } from 'react';
 import PureRenderComponent from './PureRenderComponent';
 import nodePropTypes from '../propTypes/node';
 
 export default class ForceGraphNode extends PureRenderComponent {
   static get propTypes() {
     return {
+      children: PropTypes.any,
+      tag: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
       node: nodePropTypes.isRequired,
       cx: PropTypes.number,
       cy: PropTypes.number,
@@ -38,6 +39,7 @@ export default class ForceGraphNode extends PureRenderComponent {
 
   static get defaultProps() {
     return {
+      tag: 'circle',
       className: '',
       fill: '#333',
       opacity: 1,
@@ -48,21 +50,27 @@ export default class ForceGraphNode extends PureRenderComponent {
 
   render() {
     const {
-      node, className, r,
+      node, className, r, tag: Tag, children,
       /* eslint-disable no-unused-vars */
-      labelStyle, labelClass, showLabel,
+      labelStyle, labelClass, showLabel, scale,
       /* eslint-enable no-unused-vars */
       ...spreadable
     } = this.props;
 
     const { radius = 5 } = node;
 
+    let tagProperties = { className: `rv-force__node ${className}`, ...spreadable };
+    if (Tag === 'circle') {
+      tagProperties = { ...tagProperties, r: (r || radius) };
+    }
     return (
-      <circle
-        className={`rv-force__node ${className}`}
-        r={r || radius}
-        {...spreadable}
-      />
+      <Tag {...tagProperties}>
+        {children && Children.map(children, (child, idx) =>
+          cloneElement(child, {
+            ...this.props,
+          })
+        )}
+      </Tag>
     );
   }
 }
