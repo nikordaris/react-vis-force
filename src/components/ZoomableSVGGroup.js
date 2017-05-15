@@ -33,6 +33,23 @@ export const ZOOMABLE_SVG_GROUP_EVENT_NAMES = [
   'onWheel',
 ];
 
+export const DEFAULT_ZOOM_PROPS = {
+  disabled: false,
+  // scale up or down at 6.5% of the previous size
+  zoomSpeed: 0.065,
+  // only pan to 75% of the width or height
+  panLimit: 0.75,
+  // no limit to scale
+  minScale: 0,
+  maxScale: Infinity,
+  onZoom() {},
+  onPan() {},
+  ...ZOOMABLE_SVG_GROUP_EVENT_NAMES.reduce((obj, eventName) => ({
+    ...obj,
+    [eventName]() {},
+  }), {}),
+};
+
 /**
  * This component draws upon the patterns in https://github.com/anvaka/panzoom
  * and applies them to a simple React component that can wrap SVG children.
@@ -57,22 +74,7 @@ export default class ZoomableSVGGroup extends PureRenderComponent {
   }
 
   static get defaultProps() {
-    return {
-      disabled: false,
-      // scale up or down at 6.5% of the previous size
-      zoomSpeed: 0.065,
-      // only pan to 75% of the width or height
-      panLimit: 0.75,
-      // no limit to scale
-      minScale: 0,
-      maxScale: Infinity,
-      onZoom() {},
-      onPan() {},
-      ...ZOOMABLE_SVG_GROUP_EVENT_NAMES.reduce((obj, eventName) => ({
-        ...obj,
-        [eventName]() {},
-      }), {}),
-    };
+    return DEFAULT_ZOOM_PROPS;
   }
 
   /**
@@ -181,12 +183,12 @@ export default class ZoomableSVGGroup extends PureRenderComponent {
   }
 
   panBy(clientX, clientY, event) {
-    const { width, height, panLimit } = this.props;
+    // const { width, height, panLimit } = this.props;
     const {
       matrix: prevMatrix,
       dragX: prevDragX,
       dragY: prevDragY,
-      scale,
+      // scale,
     } = this.state;
 
     const dx = clientX - prevDragX;
@@ -196,12 +198,18 @@ export default class ZoomableSVGGroup extends PureRenderComponent {
 
     // check that we aren't passing the panLimit
     // TODO this feels a little janky in practice
-    if (
-      (Math.abs(newX / scale)) > (width * panLimit) ||
-      (Math.abs(newY / scale)) > (height * panLimit)
-    ) {
-      return;
-    }
+    // This doesn't work well for data that exceeds the canvas size. The limit
+    // here assumes the data fits in side of the canvas at scale >= 1. Ideally,
+    // the pan limit would hault at (width|height / 2) + border node position.
+    // It is probably better to have unlimited panning than to prematurely block
+    // panning and hide data.
+
+    // if (
+    //   (Math.abs(newX / scale)) > (width * panLimit) ||
+    //   (Math.abs(newY / scale)) > (height * panLimit)
+    // ) {
+    //   return;
+    // }
 
     this.setState({
       dragX: clientX,
