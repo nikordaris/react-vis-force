@@ -83,6 +83,7 @@
     "check-licence": "uber-licence --dry",
     "add-licence": "uber-licence",
     "deploy-docs": "./bin/deploy-docs.sh",
+    "postinstall": "npm run build",
     "prepublish": "npm run coverage && npm run build && npm run add-licence",
     "postpublish": "npm run build:docs && npm run deploy-docs",
     "ci:postsuccess": "npm run build:docs && npm run deploy-docs",
