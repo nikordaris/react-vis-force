@@ -861,8 +861,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	          _ZoomableSVGGroup2.default,
 	          _extends({
 	            disabled: !zoom,
-	            height: maxPanHeight,
-	            width: maxPanWidth
+	            height: height,
+	            width: width
 	          }, zoomOptions, {
 	            onZoom: function onZoom() {
 	              return _this2.onZoom.apply(_this2, arguments);
