@@ -259,9 +259,9 @@ export default class ForceGraph extends PureRenderComponent {
     const zoomableChildren = [];
     const staticChildren = [];
     const maxPanWidth = reduce(nodePositions, (maxWidth, { cx }) =>
-      (maxWidth > Math.abs(cx) ? maxWidth : Math.abs(cx)), 0);
+      (maxWidth > Math.abs(cx) ? maxWidth : Math.abs(cx)), width);
     const maxPanHeight = reduce(nodePositions, (maxHeight, { cy }) =>
-      (maxHeight > Math.abs(cy) ? maxHeight : Math.abs(cy)), 0);
+      (maxHeight > Math.abs(cy) ? maxHeight : Math.abs(cy)), height);
     // build up the real children to render by iterating through the provided children
     Children.forEach(children, (child, idx) => {
       if (isNode(child)) {
