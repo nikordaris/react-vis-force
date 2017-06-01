@@ -789,11 +789,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var maxPanWidth = (0, _lodash.reduce)(nodePositions, function (maxWidth, _ref3) {
 	        var cx = _ref3.cx;
 	        return maxWidth > Math.abs(cx) ? maxWidth : Math.abs(cx);
-	      }, 0);
+	      }, width);
 	      var maxPanHeight = (0, _lodash.reduce)(nodePositions, function (maxHeight, _ref4) {
 	        var cy = _ref4.cy;
 	        return maxHeight > Math.abs(cy) ? maxHeight : Math.abs(cy);
-	      }, 0);
+	      }, height);
 	      // build up the real children to render by iterating through the provided children
 	      _react.Children.forEach(children, function (child, idx) {
 	        if (isNode(child)) {
@@ -861,8 +861,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	          _ZoomableSVGGroup2.default,
 	          _extends({
 	            disabled: !zoom,
-	            height: height,
-	            width: width
+	            height: maxPanHeight,
+	            width: maxPanWidth
 	          }, zoomOptions, {
 	            onZoom: function onZoom() {
 	              return _this2.onZoom.apply(_this2, arguments);
